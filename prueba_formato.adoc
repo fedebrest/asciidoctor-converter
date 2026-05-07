@@ -1,0 +1,69 @@
+= Informe Técnico de Prueba Extrema
+Doc-as-Code Specialist expert@example.com
+v1.0, 2023-10-27
+:toc:
+:homepage: https://asciidoc.org
+:icons: font
+
+== 1. Formatos de Texto y Estilos
+
+En este párrafo probamos la combinación de negrita fuerte, cursiva enfatizada y el uso de monoespaciado para código.
+
+También podemos hacer combinaciones como negrita y cursiva o incluso [red]#texto en color rojo# (si el backend lo soporta).
+
+== 2. Elementos de Estructura Complejos
+
+=== 2.1. Listas y Tareas
+
+Elemento de lista simple
+ Subelemento anidado
+
+[x] Tarea completada
+
+[ ] Tarea pendiente
+
+=== 2.2. Bloques de Advertencia (Admonitions)
+
+[NOTE]
+
+Este es un bloque de nota para resaltar información importante.
+
+[WARNING]
+.Cuidado con los parámetros
+
+Asegúrate de que la ruta al archivo sea válida antes de ejecutar el script de Python.
+
+== 3. Bloque de Código Fuente
+
+[source,python]
+
+def calcular_potencia(base, exponente):
+"""Calcula la potencia de un número usando recursividad."""
+if exponente == 0:
+return 1
+else:
+return base * calcular_potencia(base, exponente - 1)
+
+print(f"Resultado: {calcular_potencia(2, 8)}")
+
+== 4. Tablas de Datos
+
+.Comparativa de Herramientas
+[cols="1,2,1", options="header"]
+|===
+| Herramienta | Función Principal | Lenguaje
+| Asciidoctor | Procesador de texto | Ruby
+| Apache FOP | Generador de PDF | Java
+| Python | Orquestador | Python
+|===
+
+== 5. Fórmulas Matemáticas (LaTeX)
+
+Si tienes configurado el soporte, podemos ver fórmulas como:
+
+$E = mc^2$
+
+$$\frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
+
+== Conclusión
+Este documento sirve para verificar que el paso de XML a PDF respeta la jerarquía de títulos y el renderizado de tablas.
