@@ -14,10 +14,12 @@ Es la plataforma más sencilla de configurar. Ejecuta el siguiente comando para 
 
 ```bash
 sudo apt update
-sudo apt install -y asciidoctor fop docbook-xsl-ns python3
+sudo apt install -y asciidoctor fop docbook-xsl-ns libxalan2-java libxerces2-java python3
 ```
 
-**Nota**: El paquete ```docbook-xsl-ns``` es indispensable para que FOP sepa cómo convertir los elementos XML en formato visual para el PDF.
+**Notas**: 
+* Las librerías ```libxalan2-java``` y ```libxerces2-java``` son necesarias para que FOP procese correctamente las hojas de estilo complejas de DocBook.
+* El paquete ```docbook-xsl-ns``` es indispensable para que FOP sepa cómo convertir los elementos XML en formato visual para el PDF.
 
 #### **🍏 macOS**
 
@@ -40,11 +42,11 @@ brew install asciidoctor fop docbook-xsl
 gem install asciidoctor
 ```
 
-**3. Apache FOP**:
+**3. Apache FOP y Java**:
 
-* Descargar el binario de [Apache FOP](https://xmlgraphics.apache.org/fop/download.html).
+* Descargar e instalar el [JRE de Java](https://www.java.com/es/)
 
-* Descomprimir y añadir la carpeta ```/bin``` a las Variables de Entorno (PATH).
+* Descargar el binario de [Apache FOP](https://xmlgraphics.apache.org/fop/download.html) y añadir la carpeta ```/bin``` al  PATH.
 
 **4. Hojas de Estilo XSL (Indispensable)**:
 
@@ -97,6 +99,12 @@ python converter.py prueba.adoc
 **4. Búsqueda XSL:** Localiza las hojas de estilo en el sistema para dar formato al documento.
 
 **5. Renderizado PDF:** Llama a ```fop``` para unir el XML y el XSL en el PDF final.
+
+**6. XPATH_LIMIT:** El script inyecta variables de entorno ```(FOP_OPTS)``` para desactivar los límites de recursividad de Java en expresiones XPath complejas.
+
+**7. XSLT Lookup:** Localiza automáticamente las hojas de estilo en rutas estándar de Linux.
+
+**8. Java Memory:** Optimizado para manejar documentos de gran tamaño sin desbordar la memoria.
 
 #### **📂 Estructura de Salida**
 
