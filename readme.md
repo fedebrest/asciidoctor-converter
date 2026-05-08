@@ -17,11 +17,11 @@ sudo apt update
 sudo apt install -y asciidoctor fop docbook-xsl-ns python3
 ```
 
-**Nota**: El paquete docbook-xsl-ns es indispensable para que FOP sepa cómo convertir los elementos XML en formato visual para el PDF.
+**Nota**: El paquete ```docbook-xsl-ns``` es indispensable para que FOP sepa cómo convertir los elementos XML en formato visual para el PDF.
 
 #### **🍏 macOS**
 
-Utilizando Homebrew:
+Utilizando [Homebrew](https://brew.sh):
 
 ```bash
 brew install asciidoctor fop docbook-xsl
@@ -29,11 +29,11 @@ brew install asciidoctor fop docbook-xsl
 
 #### **🪟 Windows**
 
-**1. Python**: Descargar desde python.org.
+**1. Python**: Descargar desde [python.org](https://www.python.org/).
 
 **2. Asciidoctor**:
 
-* Instalar Ruby.
+* Instalar [Ruby](https://rubyinstaller.org/).
 
 * Ejecutar en la terminal: 
 ```bash
@@ -42,13 +42,13 @@ gem install asciidoctor
 
 **3. Apache FOP**:
 
-* Descargar el binario de Apache FOP.
+* Descargar el binario de [Apache FOP](https://xmlgraphics.apache.org/fop/download.html).
 
-* Descomprimir y añadir la carpeta /bin a las Variables de Entorno (PATH).
+* Descomprimir y añadir la carpeta ```/bin``` a las Variables de Entorno (PATH).
 
 **4. Hojas de Estilo XSL (Indispensable)**:
 
-* Descargar las DocBook XSL Stylesheets.
+* Descargar las [DocBook XSL Stylesheets](https://sourceforge.net/projects/docbook/files/docbook-xsl-ns/).
 
 * Extraer los archivos y asegurarse de que la ruta coincida con la configurada en converter.py.
 
@@ -61,14 +61,14 @@ git clone https://github.com/tu-usuario/nombre-del-repo.git
 cd nombre-del-repo
 ```
 
-El script utiliza únicamente la librería estándar de Python (subprocess, argparse, pathlib), por lo que no requiere instalar librerías adicionales con pip.
+El script utiliza únicamente la librería estándar de Python (```subprocess```, ```argparse```, ```pathlib```), por lo que *no requiere instalar librerías adicionales con pip*.
 
 #### **🚀 Guía de Uso Paso a Paso**
 
 
 ##### **1. Preparar el archivo**
 
-Asegurarse de tener el archivo .adoc listo (por ejemplo, prueba.adoc) en la carpeta del proyecto.
+Asegurarse de tener el archivo ```.adoc``` listo (por ejemplo, ```prueba.adoc```) en la carpeta del proyecto.
 
 ##### **2. Ejecutar el script**
 
@@ -90,24 +90,24 @@ python converter.py prueba.adoc
 
 **1. Validación:** Comprueba que el archivo de entrada existe.
 
-**2. Organización:** Crea automáticamente las carpetas /documentos XML y /documentos PDF.
+**2. Organización:** Crea automáticamente las carpetas ```/documentos XML``` y ```/documentos PDF```.
 
-**3. Generación XML:** Llama a asciidoctor para crear un archivo DocBook 5.
+**3. Generación XML:** Llama a ```sciidoctor``` para crear un archivo DocBook 5.
 
 **4. Búsqueda XSL:** Localiza las hojas de estilo en el sistema para dar formato al documento.
 
-**5. Renderizado PDF:** Llama a fop para unir el XML y el XSL en el PDF final.
+**5. Renderizado PDF:** Llama a ```fop``` para unir el XML y el XSL en el PDF final.
 
 #### **📂 Estructura de Salida**
 
-* documentos XML/ ➡️ Contiene el archivo .xml intermedio (útil para depuración técnica).
+* ```documentos XML/``` ➡️ Contiene el archivo ```.xml``` intermedio (útil para depuración técnica).
 
-* documentos PDF/ ➡️ Contiene tu documento final listo para distribuir.
+* ```documentos PDF/``` ➡️ Contiene tu documento final listo para distribuir.
 
 #### **💡 Solución de Problemas Comunes**
 
-* Error: "XSLT file must be specified": Este error ocurre si se tiene instalado el paquete docbook-xsl-ns. Revisar la sección de requisitos de Linux arriba.
+* Error: "XSLT file must be specified": Este error ocurre si se tiene instalado el paquete ```docbook-xsl-ns``` . Revisar la sección de requisitos de Linux arriba.
 
-* Comando no encontrado: Verificar que tanto fop como asciidoctor estén en la variable de entorno PATH. Probar ejecutando fop -version en la terminal.
+* Comando no encontrado: Verificar que tanto ```fop``` como ```asciidoctor``` estén en la variable de entorno PATH. Probar ejecutando ```fop -version``` en la terminal.
 
-* Caracteres especiales: Asegurarse de que los archivos .adoc estén guardados con codificación UTF-8.
+* Caracteres especiales: Asegurarse de que los archivos ```.adoc``` estén guardados con codificación UTF-8.
