@@ -1,106 +1,113 @@
-🚀 AsciiDoc to PDF Pipeline
+# 🚀 AsciiDoc to PDF Pipeline
 
 Este repositorio proporciona un orquestador automatizado en Python para transformar documentos técnicos escritos en AsciiDoc a formato PDF con calidad profesional, utilizando el estándar DocBook XML y Apache FOP.
 
 A diferencia de otros convertidores simples, este flujo permite un control total sobre la estructura semántica y el diseño final mediante hojas de estilo XSL.
 
-🛠️ Requisitos de Sistema
+## 🛠️ Requisitos de Sistema
 
 Para que el script funcione, necesitas instalar las siguientes herramientas. El script de Python actúa como un puente entre ellas.
 
-🐧 Linux (Ubuntu/Debian)
+#### **🐧 Linux (Ubuntu/Debian)**
 
 Es la plataforma más sencilla de configurar. Ejecuta el siguiente comando para instalar todo, incluyendo las hojas de estilo necesarias para evitar errores de transformación:
 
+```bash
 sudo apt update
 sudo apt install -y asciidoctor fop docbook-xsl-ns python3
+```
 
+**Nota**: El paquete docbook-xsl-ns es indispensable para que FOP sepa cómo convertir los elementos XML en formato visual para el PDF.
 
-Nota Crítica: El paquete docbook-xsl-ns es indispensable para que FOP sepa cómo convertir los elementos XML en formato visual para el PDF.
-
-🍏 macOS
+#### **🍏 macOS**
 
 Utilizando Homebrew:
 
+```bash
 brew install asciidoctor fop docbook-xsl
+```
 
+#### **🪟 Windows**
 
-🪟 Windows
+**1. Python**: Descargar desde python.org.
 
-Python: Descárgalo de python.org.
+**2. Asciidoctor**:
 
-Asciidoctor:
+* Instalar Ruby.
 
-Instala Ruby.
+* Ejecutar en la terminal: 
+```bash
+gem install asciidoctor
+```
 
-Ejecuta en la terminal: gem install asciidoctor.
+**3. Apache FOP**:
 
-Apache FOP:
+* Descargar el binario de Apache FOP.
 
-Descarga el binario de Apache FOP.
+* Descomprimir y añadir la carpeta /bin a las Variables de Entorno (PATH).
 
-Descomprime y añade la carpeta /bin a tus Variables de Entorno (PATH).
+**4. Hojas de Estilo XSL (Indispensable)**:
 
-Hojas de Estilo XSL (Indispensable):
+* Descargar las DocBook XSL Stylesheets.
 
-Descarga las DocBook XSL Stylesheets.
+* Extraer los archivos y asegurarse de que la ruta coincida con la configurada en converter.py.
 
-Extrae los archivos y asegúrate de que la ruta coincida con la configurada en converter.py.
+#### **📦 Instalación del Proyecto**
 
-📦 Instalación del Proyecto
+Clonar este repositorio en la máquina local:
 
-Clona este repositorio en tu máquina local:
-
+```bash
 git clone https://github.com/tu-usuario/nombre-del-repo.git
 cd nombre-del-repo
-
+```
 
 El script utiliza únicamente la librería estándar de Python (subprocess, argparse, pathlib), por lo que no requiere instalar librerías adicionales con pip.
 
-🚀 Guía de Uso Paso a Paso
+#### **🚀 Guía de Uso Paso a Paso**
 
-1. Preparar el archivo
 
-Asegúrate de tener tu archivo .adoc listo (por ejemplo, prueba.adoc) en la carpeta del proyecto.
+##### **1. Preparar el archivo**
 
-2. Ejecutar el script
+Asegurarse de tener el archivo .adoc listo (por ejemplo, prueba.adoc) en la carpeta del proyecto.
 
-Abre tu terminal en la carpeta del proyecto y ejecuta:
+##### **2. Ejecutar el script**
 
-En Linux/macOS:
+Abrir la terminal en la carpeta del proyecto y ejecutar:
 
+**En Linux/macOS**:
+
+```bash
 python3 converter.py prueba.adoc
+```
 
+**En Windows:**:
 
-En Windows:
-
+```bash
 python converter.py prueba.adoc
+```
 
+##### **3. ¿Qué hace el script internamente?**
 
-3. ¿Qué hace el script internamente?
+**1. Validación:** Comprueba que el archivo de entrada existe.
 
-Validación: Comprueba que el archivo de entrada existe.
+**2. Organización:** Crea automáticamente las carpetas /documentos XML y /documentos PDF.
 
-Organización: Crea automáticamente las carpetas /documentos XML y /documentos PDF.
+**3. Generación XML:** Llama a asciidoctor para crear un archivo DocBook 5.
 
-Generación XML: Llama a asciidoctor para crear un archivo DocBook 5.
+**4. Búsqueda XSL:** Localiza las hojas de estilo en el sistema para dar formato al documento.
 
-Búsqueda XSL: Localiza las hojas de estilo en el sistema para dar formato al documento.
+**5. Renderizado PDF:** Llama a fop para unir el XML y el XSL en el PDF final.
 
-Renderizado PDF: Llama a fop para unir el XML y el XSL en el PDF final.
+#### **📂 Estructura de Salida**
 
-📂 Estructura de Salida
+* documentos XML/ ➡️ Contiene el archivo .xml intermedio (útil para depuración técnica).
 
-documentos XML/ ➡️ Contiene el archivo .xml intermedio (útil para depuración técnica).
+* documentos PDF/ ➡️ Contiene tu documento final listo para distribuir.
 
-documentos PDF/ ➡️ Contiene tu documento final listo para distribuir.
+#### **💡 Solución de Problemas Comunes**
 
-💡 Solución de Problemas Comunes
+* Error: "XSLT file must be specified": Este error ocurre si se tiene instalado el paquete docbook-xsl-ns. Revisar la sección de requisitos de Linux arriba.
 
-Error: "XSLT file must be specified": Este error ocurre si no tienes instalado el paquete docbook-xsl-ns. Revisa la sección de requisitos de Linux arriba.
+* Comando no encontrado: Verificar que tanto fop como asciidoctor estén en la variable de entorno PATH. Probar ejecutando fop -version en la terminal.
 
-Comando no encontrado: Verifica que tanto fop como asciidoctor estén en tu variable de entorno PATH. Prueba ejecutando fop -version en la terminal.
-
-Caracteres especiales: Asegúrate de que tus archivos .adoc estén guardados con codificación UTF-8.
-
-Desarrollado para entusiastas de la Documentación como Código (Docs-as-Code).
+* Caracteres especiales: Asegurarse de que los archivos .adoc estén guardados con codificación UTF-8.
