@@ -14,26 +14,26 @@ def setup_directories():
 
 def find_xsl_stylesheet():
     """Busca la ruta de la hoja de estilo DocBook XSL en el sistema."""
-    # Rutas comunes en Linux (Ubuntu/Debian)
     linux_paths = [
         "/usr/share/xml/docbook/stylesheet/docbook-xsl-ns/fo/docbook.xsl",
         "/usr/share/xml/docbook/stylesheet/docbook-xsl/fo/docbook.xsl"
     ]
-    
     if sys.platform.startswith("linux"):
         for path in linux_paths:
             if os.path.exists(path):
                 return path
-    
-    # En Windows/Mac, usualmente el usuario debería descargarla y poner la ruta aquí
-    # Por ahora, devolvemos None si no la encontramos automáticamente
     return None
 
-def run_command(command, description):
+def run_command(command, description, env=None):
     """Ejecuta un comando de sistema y maneja errores."""
     print(f"Ejecutando: {description}...")
     try:
-        result = subprocess.run(command, check=True, capture_output=True, text=True)
+        # Usamos env para pasar variables como FOP_OPTS
+        current_env = os.environ.copy()
+        if env:
+            current_env.update(env)
+            
+        result = subprocess.run(command, check=True, capture_output=True, text=True, env=current_env)
         return True
     except subprocess.CalledProcessError as e:
         print(f"Error en {description}:")
@@ -58,34 +58,35 @@ def process_document(input_file):
     adoc_to_xml = ["asciidoctor", "-b", "docbook5", "-o", xml_output, input_file]
     
     if run_command(adoc_to_xml, "Asciidoctor a DocBook XML"):
-        
-        # Intentar encontrar la hoja de estilo XSL
         xsl_path = find_xsl_stylesheet()
         
         # 2. DocBook XML -> FOP PDF
-        # Ahora incluimos el parámetro -xsl para que FOP sepa cómo formatear
         xml_to_pdf = ["fop"]
+        
+        # CONFIGURACIÓN CRÍTICA PARA EL ERROR XPATH_LIMIT
+        # Definimos variables de entorno para que Java ignore los límites de complejidad XPath
+        # y aumentamos la memoria disponible.
+        fop_env = {
+            "FOP_OPTS": "-Djdk.xml.xpathExprGrpLimit=0 -Djdk.xml.xpathExprOpLimit=0 -Djdk.xml.xpathTotalOpLimit=0",
+            "JAVA_OPTS": "-Djdk.xml.xpathExprGrpLimit=0 -Djdk.xml.xpathExprOpLimit=0 -Djdk.xml.xpathTotalOpLimit=0"
+        }
         
         if xsl_path:
             print(f"Usando hoja de estilos: {xsl_path}")
             xml_to_pdf.extend(["-xml", xml_output, "-xsl", xsl_path, "-pdf", pdf_output])
         else:
-            # Si no hay XSL local, FOP fallará a menos que el XML tenga la PI de estilo
-            print("Advertencia: No se encontró la hoja de estilos local. Intentando modo básico...")
+            print("Advertencia: No se encontró la hoja de estilos local.")
             xml_to_pdf.extend(["-xml", xml_output, "-pdf", pdf_output])
         
-        if run_command(xml_to_pdf, "DocBook XML a PDF (vía FOP)"):
+        if run_command(xml_to_pdf, "DocBook XML a PDF (vía FOP)", env=fop_env):
             print("-" * 30)
-            print(f"¡Éxito!")
-            print(f"Archivo XML: {xml_output}")
-            print(f"Archivo PDF: {pdf_output}")
+            print(f"¡Éxito! Archivo PDF: {pdf_output}")
             print("-" * 30)
 
 def main():
     parser = argparse.ArgumentParser(description="Automatización de Asciidoctor a PDF vía DocBook y FOP.")
     parser.add_argument("entrada", help="Ruta al archivo .adoc de Asciidoctor")
     args = parser.parse_args()
-    
     setup_directories()
     process_document(args.entrada)
 
